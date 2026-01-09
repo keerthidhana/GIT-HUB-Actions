@@ -1,0 +1,43 @@
+name: Complete CI-CD Pipeline
+ 
+################
+# EVENT TRIGGER
+################
+on:
+  # Manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select environment for deployment"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+ 
+################
+# JOB SECTION
+################
+ 
+  ########
+  # JOB  : DEPLOY JOB
+  # Runs on self-hosted runner
+  ########
+  deployment:
+    name: Deployment Job
+    runs-on: self-hosted
+    needs: ci-job   # Runs only if CI job succeeds
+ 
+    steps:
+      # Step 1: Print deployment environment
+      - name: Print environment
+        run: |
+          echo "Deploying to environment: ${{ github.event.inputs.environment }}"
+ 
+      # Step 2: Simulate deployment
+      - name: Deploy application
+        run: |
+          echo "Starting deployment..."
+          echo "Application deployed successfully!"
